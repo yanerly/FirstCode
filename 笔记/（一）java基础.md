@@ -110,6 +110,21 @@ JRE（运行） = JVM + java se核心类库
 
 #### 配置java环境变量
 
+##### 什么是path环境变量：
+
+windows在执行命令时要找的路径
+
+
+
+##### 为什么要配置环境变量？
+
+为了在任意路径下都可以执行java开发工具(java.exe,javac.exe)
+
+
+
+##### 配置
+
+```jav
 JAVA_HOME：C:\ProgramFile\Java\jdk-13.0.1
 
 PATH：%JAVA_HOME%\bin
@@ -121,6 +136,9 @@ CLASS_PATH：.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar;
 
 
 然后cmd,执行命令 javac,  java,  java -version
+```
+
+
 
 
 
@@ -137,6 +155,8 @@ CLASS_PATH：.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar;
 1. 单行注释和多行注释不参与编译，编译以后生成的.class文件中不包含注释掉的内容
 
 2. 文档注释可以被JDK提供的java dic所解析，提供一套说明文档
+
+3. 多行注释不可以嵌套使用
 
    
 
@@ -160,7 +180,7 @@ CLASS_PATH：.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar;
 
    编写：将java代码保存在一个以 “.java” 结尾的源文件中
 
-   编译：用javac.exe命令编译源文件以 .class结尾的字节码文件，格式：javac  源文件名.java
+   编译：用javac.exe命令编译源文件生成以 .class结尾的字节码文件，格式：javac  源文件名.java
 
    运行：用Java.exe命令解释运行字节码文件，格式：java  类名
 
@@ -186,3 +206,260 @@ CLASS_PATH：.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar;
    ```
 
    
+
+#### Scanner
+
+1. 用法：可以从键盘获取不同类型的输入变量
+
+2. 使用
+
+   ```java
+   导包： import java.util.Scanner
+       
+   Scanner实例化：Scanner scan = new Scanner(System.in);
+   
+   调用Scanner类的相关方法获取指定的类型
+    String name = scan.next();
+    int age = scan.nextInt();
+    double height = scan.nextDouble();
+    boolean isMale = scan.nextBoolean();
+    
+   注意：Scanner没有获取char类型的接口
+   ```
+
+3. 需要根据相应的方法，来输入指定类型的数据，如果输入的数据和要求的数据类型不一致，可能会出现异常
+
+   
+
+#### 分支结构
+
+##### if-else结构
+
+###### 结构：
+
+```java
+写法1：单选
+    if(){
+        
+    }
+写法2：二选一
+    if(){
+        
+    }else{
+        
+    }
+写法3：多选一
+    if(){
+        
+    }else if(){
+        
+    }else if(){
+        
+    }else{
+        
+    }
+```
+
+
+
+###### 说明：
+
+1. else结构是可选的
+
+2. 如果多条件表达式之间是互斥的（或没有交集的），哪个If在前都没有关系
+
+3. 如果多条件表达式之间有交集关系，就要考虑哪个在上面
+
+4. 如果多条件表达式之间有包含关系，通常范围小的声明放在范围大的上面，否则范围小的没有机会
+
+5. if-else可以嵌套使用
+
+6. 当if-else只有一行的时候，{}可以省略，但是不建议这么写
+
+7. else会和他最近的If进行匹配
+
+   ```java
+   int x = 4,y = 2;
+   if(x > 2)
+       if(y>0)
+    else sop("test") ;// 跟着最后一个if
+   ```
+
+   
+
+##### switch-case结构
+
+###### 结构：
+
+```java
+swich(表达式)
+    case 常量：
+    	//执行语句 1
+    	break;
+    case 常量：
+        //执行语句 2
+        break:
+	default:
+ 		//执行语句
+    	// break 
+```
+
+
+
+###### 说明：
+
+1. 根据switch表达式的值，会一次匹配各个case中的常量，一旦匹配成功，则进入对应的case结构中，调用其执行语句。当调用完执行语句后，没有遇到break，则继续执行下一个case结构中的执行语句，直到遇到break为止或者运行到末尾结束为止。
+
+2. break可以使用在switch-case结构中，表示一旦执行到此关键字，就跳出switch-case结构
+
+3. switch表达式中只能是以下6种数据类型：byte、short、char、int、枚举(JDK5.0新增)、String(JDK 7.0新增)
+
+4. case后只能是**常量**，不能是范围或表达式
+
+5. break关键字是可选的，建议加上
+
+   ```java
+   System.out.println("输入月：");
+   int month = scan.nextInt();
+   
+   System.out.println("输入日：");
+   int day = scan.nextInt();
+   
+   int sumDay = 0;
+   
+   switch(month){
+       case 12:
+           sumDay += 31;
+       case 11:
+           sumDay += 30;
+       case 10:
+           sumDay += 31;
+       case 9:
+           sumDay += 30;
+       case 8:
+           sumDay += 31;
+       case 7:
+           sumDay += 30;
+       case 6:
+           sumDay += 31;
+       case 5:
+           sumDay += 30;
+       case 4:
+           sumDay += 31;
+       case 3:
+           sumDay += 28;
+       case 2:
+           // 2月加上1月的天数
+           sumDay += 31;
+       case 1:
+           sumDay += day;
+   }
+   // 4月3日是第93天
+   System.out.println(month+"月"+day+"日是第"+sumDay+"天");
+   ```
+
+   
+
+6. default：相当于If-else中的else，default结构也是可选的。且位置是灵活的，可以在开头，中间或结尾
+
+   ```java
+   int num = 5;
+   switch(num){
+       default:
+           System.out.println("other");
+   
+       case 0:
+           System.out.println("0");
+           break;
+       case 1:
+           System.out.println("1");
+           break;
+   		}
+   ```
+
+   **会打印 other、0；default放在开头，也会先从case开始找，找不到了才走default，遇到break结束**
+
+   
+
+7. 如果switch-case中的多个语句一样，则可以进行合并，结构如下：
+
+   ```java
+   switch(表达式)
+       case 1:
+   	case 2:
+   		//执行语句
+   		break;
+   	case 3:
+   	case4:
+   		break;
+   ```
+
+   
+
+8. 用switch-case判断60分以上及格，60以下不及格
+
+   ```java
+   switch(num / 60){
+       case 0:
+           System.out.println("fail");
+           break;
+       case 1:
+           System.out.println("pass");
+           break;
+   		}
+   ```
+
+   
+
+##### if-else和switch-case的比较
+
+1. 凡是可以用switch-case表达的，能能用if-else，反之不行
+
+2. 既可以用if-else又可以用switch-case的情况，优先使用**switch-case**，效率更高
+
+   
+
+#### 循环结构
+
+循环：
+
+在满足某些条件下，反复执行某个操作
+
+
+
+##### 循环结构4要素：
+
+①初始化条件：是boolean类型，只执行一次
+
+②循环条件
+
+③循环体
+
+④迭代条件
+
+
+
+##### for循环
+
+```java
+for(①;②;④){
+    ③
+}
+
+--------------------
+下面这种写法也是对的：
+int num = 1;
+for(System.out.print('a');num < 5;System.out.print('c'),num++){
+    System.out.print('b');
+}
+// a bc bc bc bc
+```
+
+
+
+##### while循环
+
+
+
+   
+

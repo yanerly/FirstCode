@@ -644,5 +644,14 @@ int chang = array.length;// 不是方法
 
 ###### 内存解析
 
+```java
+int[] arr = new int[]{1,2,3};
+String[] arr1 = new String[4];
+arr1[0] = "AA";
+arr1[1] = "BB";
+arr1 = new String[3];
+// arr1[0] 是null;
+```
 
+![解析](E:\FirstCode\笔记\内存解析.png "解析")
 

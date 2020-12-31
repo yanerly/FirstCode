@@ -5,11 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import com.example.myapplication.base.NormalTriangleGLSurfaceView;
+import com.example.myapplication.frustumM.FrustumGLSurfaceView;
+import com.example.myapplication.rotate.OneGlSurfaceView;
+import com.example.myapplication.rotate.RotateGLSurfaceView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +50,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(glSurfaceView);*/
 
         // 方法2： 在Activity中调用
-        MyGLSurfaceView glSurfaceView = new MyGLSurfaceView(this);
-        setContentView(glSurfaceView);
+       // MyGLSurfaceView glSurfaceView = new MyGLSurfaceView(this);
+
+        setContentView(R.layout.activity_main);
+
+        initView();
+    }
+
+    private void initView() {
+        frameLayout = findViewById(R.id.framelayout);
+    }
+
+    public void show(View view){
+        switch (view.getId()){
+            case R.id.triangle_btn:
+                // 显示普通三角形
+                frameLayout.addView(new NormalTriangleGLSurfaceView(this));
+                break;
+            case R.id.cast_triangle_btn:
+                // 优化上面的三角形--->透视投影
+                frameLayout.addView(new FrustumGLSurfaceView(this));
+                break;
+            case R.id.rotate_triangle_btn:
+                // 可旋转的三角形
+                frameLayout.addView(new OneGlSurfaceView(this));
+                break;
+
+        }
     }
 }

@@ -1,18 +1,21 @@
-package com.example.myapplication;
+package com.example.myapplication.base;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 
+import com.example.myapplication.Square;
+import com.example.myapplication.Triangle;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * 2. 自定义渲染器
+ * 自定义渲染器
  */
-public class MyRender implements GLSurfaceView.Renderer {
-    private Triangle triangle;
+public class NormalTriangleRender implements GLSurfaceView.Renderer {
+    private NormalTriangle triangle;
     private Square square;
 
     // 定义投影
@@ -23,18 +26,16 @@ public class MyRender implements GLSurfaceView.Renderer {
     // 旋转投影矩阵
     private float[] mRotationMatrix = new float[16];
 
-
-
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // 设置背景色，绿色
         GLES20.glClearColor(0.0f,1.0f,0.0f,1.0f);
 
         // 初始化triangle
-        triangle = new Triangle();
+        triangle = new NormalTriangle();
 
         // 初始化 square
-        square = new Square();
+        //square = new Square();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MyRender implements GLSurfaceView.Renderer {
         float ratio = (float) width / height;
 
         // 这个透视投影矩阵被应用于对象坐标在onDrawFrame（）方法中
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        // Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
     @Override
@@ -53,14 +54,14 @@ public class MyRender implements GLSurfaceView.Renderer {
 
         // 2. 定义一个相机视图
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        // Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         // 旋转矩阵
-        float[] scratch = new float[16];
-        // 创建一个旋转矩阵
-        long time = SystemClock.uptimeMillis() % 4000L;
-        float angle = 0.090f * ((int) time);
-        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
+//        float[] scratch = new float[16];
+//        // 创建一个旋转矩阵
+//        long time = SystemClock.uptimeMillis() % 4000L;
+//        float angle = 0.090f * ((int) time);
+//        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
 
         // 3.将旋转矩阵与投影和相机视图组合在一起
         //Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
@@ -69,8 +70,8 @@ public class MyRender implements GLSurfaceView.Renderer {
          //Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         // 普通绘制
-        square.draw();
-        //triangle.draw();
+       // square.draw();
+        triangle.draw();
 
         // 透视投影+相机视图
         //triangle.draw(mMVPMatrix);

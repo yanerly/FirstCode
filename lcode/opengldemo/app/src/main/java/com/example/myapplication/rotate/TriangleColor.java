@@ -69,6 +69,7 @@ public class TriangleColor {
     };
 
     public TriangleColor() {
+        // 位置
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 triangleCoords.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -76,6 +77,8 @@ public class TriangleColor {
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(triangleCoords);
         vertexBuffer.position(0);
+
+        // 颜色
         ByteBuffer dd = ByteBuffer.allocateDirect(
                 color.length * 4);
         dd.order(ByteOrder.nativeOrder());

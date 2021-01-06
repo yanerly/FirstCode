@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.myapplication.base.NormalTriangleGLSurfaceView;
+import com.example.myapplication.circle.CircleSurfaceView;
 import com.example.myapplication.frustumM.FrustumGLSurfaceView;
+import com.example.myapplication.isoceles.IsoSurfaceView;
 import com.example.myapplication.rotate.OneGlSurfaceView;
 import com.example.myapplication.rotate.RotateGLSurfaceView;
+import com.example.myapplication.square.SquareSurfaceView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -74,6 +77,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.rotate_triangle_btn:
                 // 可旋转的三角形
                 frameLayout.addView(new OneGlSurfaceView(this));
+                break;
+            case R.id.iso_triangle_btn:
+                // 等腰可变色三角形
+                frameLayout.addView(new IsoSurfaceView(this));
+                break;
+            case R.id.square_btn:
+                // 正方形
+                frameLayout.addView(new SquareSurfaceView(this));
+                break;
+            case R.id.circle_btn:
+                // 圆形
+                frameLayout.addView(new CircleSurfaceView(this));
                 break;
 
         }

@@ -556,6 +556,120 @@ public void onDrawFrame(GL10 gl) {
 
 
 
+##### 小结：
+
+普通三角形：不带投影
+
+```java
+private final String vertexShaderCode = "" +
+    "attribute vec4 vPosition;\n" +
+    " void main() {\n" +
+    "     gl_Position = vPosition;\n" +
+    " }";
+```
+
+
+
+带投影的三角形
+
+```java
+private final String vertexShaderCode =
+    "attribute vec4 vPosition;\n" +
+    "uniform mat4 vMatrix;\n" + // 新增
+    "void main() {\n" +
+    "    gl_Position = vMatrix*vPosition;\n" +
+    "}";
+```
+
+
+
+```java
+private final float[] mMVPMatrix = new float[16];//最后起作用的总变换矩阵
+private final float[] mProjectMatrix = new float[16];//4x4矩阵 投影用
+private final float[] mViewMatrix = new float[16];//摄像机位置朝向9参数矩阵
+
+@Override
+public void onSurfaceChanged(GL10 gl, int width, int height) {
+    // 设置窗口视图
+    GLES20.glViewport(0,0,width,height);
+
+    // 投影矩阵
+    //计算宽高比
+    float ratio=(float)width/height;
+    //设置透视投影
+    Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+    //设置相机位置
+    Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+    //计算变换矩阵
+    Matrix.multiplyMM(mMVPMatrix,0,mProjectMatrix,0,mViewMatrix,0);
+}
+```
+
+
+
+##### 绘制方法glDrawArrays：
+
+```java
+// 第一个参数表示绘制方式，
+// 第二个参数表示偏移量，
+// 第三个参数表示顶点个数
+GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, shapePos.length/3);
+
+// 坐标顶点
+float squareCoords[] = {
+    -0.5f,  0.5f, 0.0f,   // top left
+    -0.5f, -0.5f, 0.0f,   // bottom left
+    0.5f, -0.5f, 0.0f,   // bottom right
+    0.5f,  0.5f, 0.0f,
+    0.75f, 0.5f,0.0f,
+    0.75f, -0.5f, 0.0f,
+};
+```
+
+###### int GL_POINTS       
+
+> 将传入的顶点坐标作为单独的点绘制
+
+
+
+###### int GL_LINES      
+
+> 将传入的坐标作为单独线条绘制，ABCDEFG六个顶点，绘制AB、CD、EF三条线
+
+![](..\images\line.png)
+
+
+
+###### int GL_LINE_STRIP 
+
+>   将传入的顶点作为折线绘制，ABCD四个顶点，绘制AB、BC、CD三条线
+
+![LINE_TRIP](..\images\LINE_TRIP.png)
+
+###### int GL_LINE_LOOP  
+
+> 将传入的顶点作为闭合折线绘制，ABCD四个顶点，绘制AB、BC、CD、DA四条线。
+
+![line_loop](..\images\line_loop.png)
+
+###### int GL_TRIANGLES 
+
+> 将传入的顶点作为单独的三角形绘制，ABCDEF绘制ABC,DEF两个三角形
+
+![line_triangle](..\images\line_triangle.png)
+
+###### int GL_TRIANGLE_FAN    
+
+> 将传入的顶点作为扇面绘制，ABCDEF绘制ABC、ACD、ADE、AEF四个三角形
+
+![LINE_FAN](..\images\LINE_FAN.png)
+
+###### int GL_TRIANGLE_STRIP   
+
+> 将传入的顶点作为三角条带绘制，ABCDEF绘制ABC,BCD,CDE,DEF四个三角形
+
+![triangle_line](..\images\triangle_line.png)
+
 ## 6.投影和相机视图
 
 <img src="E:\FirstCode\images\投影和相机视图.png" alt="投影和相机视图" style="zoom:80%;" />
@@ -599,6 +713,10 @@ Matrix.frustumM (float[] m,         //接收透视投影的变换矩阵
 ### 相机视图
 
 > 你站的高度，拿相机的位置，姿势不同，拍出来的照片也就不一样，相机视图就是来修改相机位置，观察方式以及相机的倾斜角度等属性
+>
+> - **相机位置**：相机的位置是比较好理解的，就是相机在3D空间里面的坐标点。
+> - **相机观察方向**：相机的观察方向，表示的是相机镜头的朝向，你可以朝前拍、朝后拍、也可以朝左朝右，或者其他的方向。
+> - **相机UP方向**：相机的UP方向，可以理解为相机顶端指向的方向。比如你把相机斜着拿着，拍出来的照片就是斜着的，你倒着拿着，拍出来的就是倒着的。
 
 ```java
 Matrix.setLookAtM (float[] rm,      //接收相机变换矩阵
@@ -611,6 +729,8 @@ Matrix.setLookAtM (float[] rm,      //接收相机变换矩阵
 ### 转换矩阵（变换矩阵）
 
 > 用来将数据转为OpenGl ES可用的数据字节(也就是上面的数据转换)，转换矩阵 = 相机视图 * 投影设置的数据相乘，然后将此矩阵传给顶点着色器。
+>
+> 在顶点着色器中用传入的矩阵乘以坐标的向量，得到实际展示的坐标向量
 
 ```java
 Matrix.multiplyMM (float[] result, //接收相乘结果
@@ -831,3 +951,7 @@ https://blog.csdn.net/qq_32175491/article/details/79091647
 https://learnopengl-cn.readthedocs.io/zh/latest/
 
 https://blog.csdn.net/xk7298?t=1
+
+https://blog.csdn.net/junzia/article/details/52817978
+
+https://www.e-learn.cn/content/qita/2810770

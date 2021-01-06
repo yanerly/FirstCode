@@ -32,6 +32,32 @@
             android:layout_height="wrap_content"
             android:onClick="show"
             android:text="旋转△"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/iso_triangle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="show"
+            android:text="等腰△"/>
+
+        <Button
+            android:id="@+id/square_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="show"
+            android:text="正方形△"/>
+        <Button
+            android:id="@+id/circle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="show"
+            android:text="圆形○"/>
     </LinearLayout>
 
    <FrameLayout
